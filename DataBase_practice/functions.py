@@ -1,5 +1,6 @@
 from data import DatabaseManager
 from datetime import datetime
+import logging
 
 class MessageHandler:
     """
@@ -7,20 +8,15 @@ class MessageHandler:
     """
     def __init__(self, platform="console"):
         self.platform = platform
+        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-    def display_message(self, message):
-        """
-        Displays the message depending on the platform.
-        """
-        if self.platform == "console":
-            print(message)
-        elif self.platform == "gui":
-            print(f"[GUI] {message}")
-        elif self.platform == "android":
-            print(f"[Android] {message}")
-        elif self.platform == "web":
-            print(f"[Web] {message}")
-
+    def display_message(self, message, level="info"):
+       levels = {
+           "info":logging.info,
+           "warning":logging.warning,
+           "error":logging.error
+       }
+       levels.get(level, logging.info)(f"[{self.platform.upper()}] {message}")
 
 class PurchaseManager:
     """
